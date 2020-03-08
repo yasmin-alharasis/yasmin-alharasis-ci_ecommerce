@@ -2,7 +2,7 @@
 
 class Auth extends CI_Controller
 {   
-    
+
     public function __construct(){
 
         parent::__construct();
@@ -12,18 +12,17 @@ class Auth extends CI_Controller
     }
 
     public function index()
-    {
+    { 
         $this->load->library('session');
     }
     
-
     public function login()
-    {   
+    {
     // numeric random number for captcha
     $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
     //setting up captcha config
     $vals = array(
-        'word' => $random_number,
+        'word' => 456312,
         'img_path' =>'./captcha_images/',
         'img_url' =>base_url().'captcha_images/',
         'img_width' => 140,
@@ -32,28 +31,35 @@ class Auth extends CI_Controller
     );
     $data['captcha'] = create_captcha($vals);
     $this->session->set_userdata("captchaWord",$data['captcha']['word']);
-
     $this->load->view('templates/header');
     $this->load->view('login',$data);
     $this->load->view('templates/footer');
-    $this->loginauth();
     
     }
+
     public function loginauth(){
         $this->load->library('form_validation');
         $this->load->library('session');
-        if(isset($_POST['login'])){
-            
+        $responseArray = array('status'=>400,"message"=>"Oops! unexpected error :( Please, try again later"); 
+        if(
+               $this->input->post('username',true)
+            && $this->input->post('password',true)
+            && $this->input->post('userCaptcha',true)
+        ){
+            $username=$_REQUEST['username'];
+            $password=$_REQUEST['password'];
+            $userCaptcha=$_REQUEST['userCaptcha'];
+
+            // validate user input and assign them into variable 
             $this->form_validation->set_rules('username', 'Username', 'required');
             $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
             $this->form_validation->set_rules('userCaptcha','Captcha','required|callback_check_captcha');
-
-            $userCaptcha = $this->input->post('userCaptcha');
-             //if form validation true
-             if($this->form_validation->run() == TRUE)
-             {
-                $username = $_POST['username'];
-                $password = $_POST['password'];
+            
+            //if form validation true
+            if($this->form_validation->run() == TRUE){
+                $username =$username;
+                $password =$password;
+                
                 $this->db->select('*');
                 $this->db->from('users');
                 $this->db->where(array(
@@ -61,55 +67,50 @@ class Auth extends CI_Controller
                 ));
                 $query = $this->db->get();
                 $row = $query->row();
+                
                 if(isset($row))
                 {   
-                    if (password_verify($_POST['password'],$row->password))
+                    if (password_verify($password,$row->password))
                     {   
-                        //temprory message 
-                        $this->session->set_flashdata("success","You are logged in");
                         //set session variables
                         $_SESSION['user_Logged'] = TRUE; 
                         $_SESSION['username'] =$row->username;
                         $_SESSION['user_id']=$row->user_id;
                         $_SESSION['user_type']=$row->user_type;
-                        if($_SESSION['user_type']=='admin'){
-                           redirect('/auth/dashboard');
+
+                        if($_SESSION['user_type']=='admin'){ 
+                            $responseArray["status"] = 200;
+                            $responseArray["message"] = "Please, wait till redirect you to login page";
+                            echo json_encode($responseArray);
+                            exit;
                         }else{
-                            redirect('/Shoping_cart/index');
+                            $responseArray["status"] = 300;
+                            $responseArray["message"] = "Please, wait till redirect you to login page";
+                            echo json_encode($responseArray);
+                            exit;
                         }          
-                    }else{
-                    $this->session->set_flashdata("error","Password incorrect");
-                    redirect('auth/login');
-                    } 
+                    }
                 }else{
-                    $this->session->set_flashdata("error","No such account exists in database");
-                    redirect('auth/login');
+                    $responseArray["status"] = 400;
+                    $responseArray["message"] = "invalid Username/Password";
+                    echo json_encode($responseArray);
+                    exit;
                 }
             }else{
-            // numeric random number for captcha
-            $random_number = substr(number_format(time() * rand(),0,'',''),0,6);
-            //setting up captcha config
-            $vals = array(
-                'word' => $random_number,
-                'img_path' =>'./captcha_images/',
-                'img_url' =>base_url().'captcha_images/',
-                'img_width' => 140,
-                'img_height' => 32,
-                'expiration' =>7200
-            );
-            $data['captcha'] = create_captcha($vals);
-            $this->session->set_userdata("captchaWord",$data['captcha']['word']);
-            $this->load->view('templates/header');
-            $this->load->view('login',$data);
-            $this->load->view('templates/footer');
-
-            }
-        }        
+                $responseArray["status"] = 409;
+                $responseArray["message"] = "please enter correct word";
+                echo json_encode($responseArray);
+                exit;
+            }   
+        }else{
+            echo json_encode($responseArray);
+            exit;
+        }
+        
     }
 
     public function check_captcha($str)
     {   
-
         $word = $this->session->userdata("captchaWord");
         if(strcmp(strtoupper($str),strtoupper($word)) == 0){
             return true;
@@ -117,8 +118,8 @@ class Auth extends CI_Controller
             $this->form_validation->set_message('check_captcha','Please enter correct words');
             return false;
         }
-
     }
+
     public function profile()
     {   
         
@@ -163,7 +164,6 @@ class Auth extends CI_Controller
             $this->form_validation->set_error_delimiters();
 
             //if form validation true
-            $options = [ 'cost' => 7, 'salt' => 'usesomesillystringforsalt' ];
             if($this->form_validation->run() == TRUE){
                 $data = array(
                     'username' => $_POST['username'],
@@ -188,5 +188,4 @@ class Auth extends CI_Controller
         }
     }
 }
-
 ?>
