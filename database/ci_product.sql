@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2020 at 12:59 PM
+-- Generation Time: Mar 08, 2020 at 07:17 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.27
 
@@ -38,14 +38,6 @@ CREATE TABLE `order` (
   `deleted_at` date NOT NULL,
   `color_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `order`
---
-
-INSERT INTO `order` (`OrderId`, `user_id`, `product_id`, `product_name`, `quantity`, `product_price`, `deleted_at`, `color_id`) VALUES
-(67, 41, 22, 'one plus', 1, 654, '0000-00-00', 4),
-(68, 41, 22, 'one plus', 2, 654, '0000-00-00', 5);
 
 -- --------------------------------------------------------
 
@@ -84,8 +76,15 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `category_id`, `pname`, `status`, `image`, `price`, `description`, `color_id`, `quentity`) VALUES
-(22, 1, 'one plus', 0, 'XiaomiMi9-b4.jpg', 654, 'dhvawhdabds,b\r\nbdjbajkdbajdnjan,\r\ndsn.akdnjasbdad', 5, 5),
-(23, 1, 'one plus', 0, 'XiaomiMi9-b4.jpg', 654, 'dhvawhdabds,b\r\nbdjbajkdbajdnjan,\r\ndsn.akdnjasbdad', 4, 1);
+(28, 1, 'LG', 0, 'lg-v40-thinq5.png', 541, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 4, 5),
+(29, 1, 'LG', 0, 'lg-v40-thinq5.png', 541, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 5, 6),
+(30, 1, 'apple', 0, 'apple19.png', 463, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 1, 1),
+(31, 1, 'apple', 0, 'apple19.png', 463, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 2, 10),
+(32, 1, 'apple', 0, 'apple19.png', 463, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 3, 5),
+(33, 1, 'apple', 0, 'apple19.png', 463, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 5, 4),
+(34, 1, 'vivo', 0, 'vivo3.png', 351, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 2, 10),
+(35, 1, 'vivo', 0, 'vivo3.png', 351, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 4, 4),
+(36, 1, 'XiaomiMi9-b', 0, 'XiaomiMi9-b5.jpg', 600, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s', 2, 9);
 
 -- --------------------------------------------------------
 
@@ -226,7 +225,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `OrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `OrderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `posts`
@@ -238,7 +237,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `product_color`
