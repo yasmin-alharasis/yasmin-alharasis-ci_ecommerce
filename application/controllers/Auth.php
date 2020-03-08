@@ -85,7 +85,7 @@ class Auth extends CI_Controller
                             exit;
                         }else{
                             $responseArray["status"] = 300;
-                            $responseArray["message"] = "Please, wait till redirect you to login page";
+                            //$responseArray["message"] = "Please, wait till redirect you to login page";
                             echo json_encode($responseArray);
                             exit;
                         }          
